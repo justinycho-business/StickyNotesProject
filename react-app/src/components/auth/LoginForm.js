@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { login } from '../../store/session';
+import classes from './LoginForm.module.css'
 
 const LoginForm = () => {
   const [errors, setErrors] = useState([]);
@@ -12,7 +13,15 @@ const LoginForm = () => {
 
   const onLogin = async (e) => {
     e.preventDefault();
-    const data = await dispatch(login(email, password));
+    const data = await dispatch(login('demo@aa.io', 'password'));
+    if (data) {
+      setErrors(data);
+    }
+  };
+
+  const onLogin2 = async (e) => {
+    e.preventDefault();
+    const data = await dispatch(login('marnie@aa.io', 'password'));
     if (data) {
       setErrors(data);
     }
@@ -31,7 +40,15 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={onLogin}>
+    <div className={classes.loginform} >
+      <div>
+        {errors.map((error, ind) => (
+          <div key={ind}>{error}</div>
+        ))}
+      </div>
+      <button className={classes.loginbutton} onClick={onLogin}>Demo User 1</button>
+      <button className={classes.loginbutton} onClick={onLogin2}>Demo User 2</button>
+    {/* <form className={classes.loginform} onSubmit={onLogin}>
       <div>
         {errors.map((error, ind) => (
           <div key={ind}>{error}</div>
@@ -58,7 +75,9 @@ const LoginForm = () => {
         />
         <button type='submit'>Login</button>
       </div>
-    </form>
+    </form> */}
+
+  </div>
   );
 };
 

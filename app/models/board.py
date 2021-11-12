@@ -7,7 +7,7 @@ class Board(db.Model):
     name = db.Column(db.VARCHAR, nullable=False)
 
     def to_dict(self):
-            return {
+        return {
               'id': self.id,
               'name': self.name,
 

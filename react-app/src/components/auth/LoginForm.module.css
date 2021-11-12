@@ -1,0 +1,13 @@
+.loginform {
+    padding-top: 2vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginbutton{
+    padding: 2vw;
+    border-radius: 5px;
+    margin: 2vw;
+}
