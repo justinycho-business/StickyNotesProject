@@ -10,7 +10,8 @@ class Image(db.Model):
     # user = db.relationship("User", back_populates="list")
     imageURL = db.Column(db.VARCHAR, nullable=False)
     # card = db.relationship("Card", back_populates="list", cascade="all, delete-orphan")
-
+    x = db.Column(db.INTEGER, nullable=False)
+    y = db.Column(db.INTEGER, nullable=False)
     def to_dict(self):
             return {
               'id': self.id,
@@ -18,4 +19,6 @@ class Image(db.Model):
               'imageURL': self.imageURL,
               # 'user_id': self.user_id,
               'board_id': self.board_id,
+              'x': self.x,
+              'y': self.y
             }

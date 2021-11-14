@@ -14,21 +14,27 @@ def seed_notes():
         title = 'note_zero',
         board_id = 1,
         content = "first note",
-        color = "yellow"
+        color = "yellow",
+        x=0,
+        y=0,
 
         )
     note1 = Note(
         title = 'note_one',
         board_id = 1,
         content = "second note",
-        color = "blue"
+        color = "blue",
+        x=0,
+        y=0,
         )
 
     note2 = Note(
         title = 'note_two',
         board_id = 1,
         content = "third note",
-        color = "red"
+        color = "red",
+        x=0,
+        y=0,
         )
 
 

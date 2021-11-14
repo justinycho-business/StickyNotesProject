@@ -1,0 +1,36 @@
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.listofboards{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.notecanvas {
+
+    width: 95vw;
+    height: 75vh;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.whiteboardcontainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.actionpanel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 90vw;
+}

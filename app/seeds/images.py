@@ -10,16 +10,22 @@ def seed_images():
     image0 = Image(
         title='image0',
         board_id=1,
+        x=0,
+        y=0,
         imageURL = 'https://static.wikia.nocookie.net/googology/images/c/c0/Zero.jpg/revision/latest?cb=20180112064134'
         )
     image1 = Image(
         title='image1',
         board_id=1,
+        x=0,
+        y=0,
         imageURL = 'https://www.edupics.com/image-number-1-dm20182.jpg'
         )
     image2 = Image(
         title='image2',
         board_id=2,
+        x=0,
+        y=0,
         imageURL = "https://www.edupics.com/image-number-2-b-dm20181.jpg"
         )
 

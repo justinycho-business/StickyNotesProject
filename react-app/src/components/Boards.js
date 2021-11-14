@@ -20,21 +20,25 @@ function Boards() {
 
   }, []);
 
-  const boardComponents = boardsRedux.map((board) => {
+  let boardComponents;
+
+  if (boardsRedux && boardsRedux.length > 0 ) {
+  boardComponents = boardsRedux.map((board) => {
     return (
       <div key={board.id}>
         <NavLink to={`/board/${board.id}`}>{board.name}</NavLink>
       </div>
     );
   });
+}
 
   return (
     <>
     <div className={classes.header}>
       <h1>Boards</h1>
       </div>
-      { boardsRedux.length > 0 &&
-      <div>{boardComponents}</div>}
+      { boardsRedux && boardsRedux.length > 0 &&
+      <div className={classes.listofboards}>{boardComponents}</div>}
     </>
   );
 }

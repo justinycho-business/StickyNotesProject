@@ -10,7 +10,7 @@ const NavBar = () => {
 
         <div>
           <NavLink to='/' exact={true} activeClassName='active'>
-            Home
+            Boards
           </NavLink>
         </div>
         <div>
@@ -23,11 +23,11 @@ const NavBar = () => {
             Sign Up
           </NavLink>
         </div> */}
-        <div>
+        {/* <div>
           <NavLink to='/users' exact={true} activeClassName='active'>
             Users
           </NavLink>
-        </div>
+        </div> */}
         <div>
           <LogoutButton />
         </div>

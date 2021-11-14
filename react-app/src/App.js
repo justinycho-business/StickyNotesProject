@@ -9,6 +9,7 @@ import UsersList from './components/UsersList';
 import User from './components/User';
 import { authenticate } from './store/session';
 import Boards from './components/Boards';
+import BoardPage from './components/BoardPage';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -32,17 +33,8 @@ function App() {
         <Route path='/login' exact={true}>
           <LoginForm />
         </Route>
-        <Route path='/boards' exact={true}>
-          <LoginForm />
-        </Route>
-        <Route path='/sign-up' exact={true}>
-          <SignUpForm />
-        </Route>
-        <ProtectedRoute path='/users' exact={true} >
-          <UsersList/>
-        </ProtectedRoute>
-        <ProtectedRoute path='/users/:userId' exact={true} >
-          <User />
+        <ProtectedRoute path='/board/:boardid' exact={true}>
+          <BoardPage />
         </ProtectedRoute>
         <ProtectedRoute path='/' exact={true} >
           <Boards/>
