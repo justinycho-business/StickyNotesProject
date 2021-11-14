@@ -74,7 +74,52 @@ def notecreate(boardid):
 @board_routes.route('/notes/notedelete/<int:noteid>', methods=['DELETE'])
 @login_required
 def notedelete(noteid):
-    pass
+    request_data_body = request.get_json()
+    board_id = request_data_body['board_id']
+    note_to_dlt = Note.query.filter_by(id = noteid).first()
+    # step 2
+    db.session.delete(note_to_dlt)
+    #step 3
+    db.session.commit()
+    notes = Note.query.filter_by(board_id=board_id).all()
+    notesarray = [note.to_dict() for note in notes]
+
+    def myFunc(note):
+        return note['id']
+    # so sticky notes persist on reload
+    notesarray.sort(key=myFunc)
+
+    print("=====================note created", notesarray)
+    return {'notes': notesarray}
+
+@board_routes.route('/notes/noteedit/<int:note_id>', methods=['PUT'])
+@login_required
+def noteedit(note_id):
+    request_data_body = request.get_json()
+    noteid_fromjson = request_data_body['noteid']
+    color_fromjson = request_data_body['color']
+    title_fromjson = request_data_body['title']
+    content_fromjson = request_data_body['content']
+    boardid_fromjson = request_data_body['board_id']
+
+    note_to_change = Note.query.get(noteid_fromjson)
+    print("==============", note_to_change)
+    note_to_change.content = content_fromjson
+    note_to_change.title = title_fromjson
+    note_to_change.color = color_fromjson
+
+    db.session.commit()
+
+    notes = Note.query.filter_by(board_id=boardid_fromjson).all()
+    notesarray = [note.to_dict() for note in notes]
+
+    def myFunc(note):
+        return note['id']
+    # so sticky notes persist on reload
+    notesarray.sort(key=myFunc)
+
+    print("=====================note edited", notesarray)
+    return {'notes': notesarray}
 
 @board_routes.route('/notes/notepositionchange/<int:note_id>', methods=['PUT'])
 @login_required

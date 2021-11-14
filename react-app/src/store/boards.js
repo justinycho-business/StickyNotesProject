@@ -4,6 +4,8 @@ const GET_ALL_BOARDS = 'board/GET_ALL_BOARDS'
 const GET_ALL_NOTES = 'board/GET_ALL_NOTES'
 const NOTES_POSITION = 'board/NOTES_POSITION'
 const NOTE_CREATE = 'board/NOTES_POSITION';
+const NOTE_DELETE = 'board/NOTES_DELETE';
+const NOTE_EDIT = 'board/NOTES_EDIT'
 
 // Action Creators
 const getAllBoards = (boards) => ({
@@ -16,6 +18,11 @@ const getAllNotes = (notes) => ({
     payload: notes
 })
 
+const noteEdit = (notes) => ({
+    type: NOTE_EDIT,
+    payload: notes
+})
+
 const notePosition = (notes) => ({
     type: NOTES_POSITION,
     payload: notes
@@ -23,6 +30,11 @@ const notePosition = (notes) => ({
 
 const newNote = (notes) => ({
     type: NOTE_CREATE,
+    payload: notes
+})
+
+const deleteNote = (notes) => ({
+    type: NOTE_DELETE,
     payload: notes
 })
 
@@ -66,6 +78,28 @@ export const positionNotesThunk = (noteid, x, y) => async (dispatch) => {
         dispatch(notePosition(noteData));
 }}
 
+export const noteEditThunk = (noteid, boardid, color, title, content, numberofnotes,  setNumberofNotes) => async (dispatch) => {
+    console.log('ditthunk');
+    const response = await fetch(`/api/board/notes/noteedit/${noteid}`, {
+        method: ['PUT'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({
+            'noteid': noteid,
+            'board_id': boardid,
+            'color': color,
+            'title': title,
+            'content': content
+                                   })
+    })
+
+    if(response.ok) {
+        const noteData = await response.json();
+        dispatch(noteEdit(noteData));
+}}
+
 export const noteCreate = (boardid, numberofnotes,  setNumberofNotes) => async (dispatch) => {
     console.log("createnotethunk");
     const response = await fetch(`/api/board//notes/notecreate/${boardid}`, {
@@ -86,6 +120,27 @@ export const noteCreate = (boardid, numberofnotes,  setNumberofNotes) => async (
 
 }}
 
+export const noteDelete = (noteid, boardid, numberofnotes,  setNumberofNotes) => async (dispatch) => {
+    console.log("deletenotethunk");
+    const response = await fetch(`/api/board//notes/notedelete/${noteid}`, {
+        method: ['DELETE'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({
+            'board_id': boardid,
+                                   })
+    })
+
+    if(response.ok) {
+        const noteData = await response.json();
+        dispatch(deleteNote(noteData));
+        setNumberofNotes(numberofnotes-1)
+
+}}
+
+
 // Define initial state
 const initialState = {}
 
@@ -104,6 +159,10 @@ export default function boardReducer(state = initialState, action) {
             let notestate1 = {...state, notes: action.payload}
             // notestate = [action.payload['notes']['board_id']] = action.payload
             return notestate1
+        case NOTE_DELETE:
+            return {...state, notes: action.payload}
+        case NOTE_EDIT:
+            return {...state, notes: action.payload}
         default:
             return state;
     };

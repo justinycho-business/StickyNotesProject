@@ -54,6 +54,15 @@ class Note extends React.Component {
     this.props.position_dispatch(this.props.id, newX, newY)
     }
 
+    delete_Note = () => {
+        this.props.deleteNote_dispatch(
+            this.props.id,
+            this.props.board_id)
+    }
+
+    editNoteThunk = (noteid, boardid, color, title, content) => {
+        return this.props.editNoteThunk(noteid, boardid, color, title, content)
+    }
     render() {
       return (
         <Draggable
@@ -80,9 +89,17 @@ class Note extends React.Component {
                 <button onClick={this.modalSwitch}><FaCog/></button>
                 {
                     this.state.modalOpen &&
-                    <NoteEditModalFull onConfirm={this.modalSwitch} />
+                    <NoteEditModalFull
+                    noteid = {this.props.id}
+                    onConfirm={this.modalSwitch}
+                    title = {this.props.title}
+                    board_id = {this.props.board_id}
+                    content = {this.props.content}
+                    color = {this.props.color}
+                    editNoteThunk = {this.editNoteThunk}
+                    />
                 }
-                <button>X</button>
+                <button onClick={this.delete_Note}>X</button>
                 </div>
             </div>
 

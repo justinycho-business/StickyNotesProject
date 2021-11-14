@@ -5,7 +5,9 @@ import classes from './BoardPage.module.css';
 import {getAllBoard,
         getAllNotesThunk,
         positionNotesThunk,
-        noteCreate} from '../store/boards';
+        noteCreate,
+        noteDelete,
+        noteEditThunk} from '../store/boards';
 import Draggable, {DraggableCore} from 'react-draggable'; // https://www.npmjs.com/package/react-draggable
 import Note from './Notes';
 
@@ -45,6 +47,28 @@ function BoardPage() {
     return dispatch(noteCreate(boardid, numberofnotes, setNumberofNotes))
   }
 
+  const deleteNote = (noteid, boardid) => {
+    console.log("will dispatch notecreatethunk");
+
+  return dispatch(noteDelete(noteid, boardid, numberofnotes, setNumberofNotes))
+}
+const editfunction = (noteid, boardid, color, title, content) => {
+    return dispatch(noteEditThunk(
+        noteid,
+        boardid,
+        color,
+        title,
+        content,
+         numberofnotes,
+         setNumberofNotes))
+}
+const editNoteThunk = (noteid, boardid, color, title, content) => {
+    console.log("will dispatch noteeditthunk");
+
+  return editfunction(noteid, boardid, color, title, content)
+}
+
+
   if (notesRedux && notesRedux.length > 0 ) {
     notesJSX = notesRedux.map((note) => {
       return (
@@ -58,6 +82,10 @@ function BoardPage() {
             x = {note.x}
             y = {note.y}
             position_dispatch = {positiondispatch}
+            deleteNote_dispatch = {deleteNote}
+            numberofnotes = {numberofnotes}
+            setNumberofNotes = {setNumberofNotes}
+            editNoteThunk = {editNoteThunk}
           />
         </div>
       );
