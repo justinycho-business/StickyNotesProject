@@ -13,7 +13,11 @@ const IMAGE_CREATE = 'board/IMAGES_POSITION';
 const NOTE_DELETE = 'board/NOTES_DELETE';
 const IMAGE_DELETE = 'board/IMAGE_DELETE';
 
-const NOTE_EDIT = 'board/NOTES_EDIT'
+const NOTE_EDIT = 'board/NOTES_EDIT';
+const IMAGES_EDIT = 'board/IMAGES_EDIT';
+
+const ALL_NOTES_DELETE = 'board/ALL_NOTES_DELETE';
+
 
 // Action Creators
 const getAllBoards = (boards) => ({
@@ -34,6 +38,11 @@ const getAllImages = (images) => ({
 const noteEdit = (notes) => ({
     type: NOTE_EDIT,
     payload: notes
+})
+
+const imageEdit = (images) => ({
+    type: IMAGES_EDIT,
+    payload: images
 })
 
 const imagePosition = (images) => ({
@@ -58,6 +67,11 @@ const newImage = (images) => ({
 
 const deleteNote = (notes) => ({
     type: NOTE_DELETE,
+    payload: notes
+})
+
+const deleteAllNote = (notes) => ({
+    type: ALL_NOTES_DELETE,
     payload: notes
 })
 
@@ -159,6 +173,31 @@ export const noteEditThunk = (noteid, boardid, color, title, content, numberofno
         dispatch(noteEdit(noteData));
 }}
 
+export const imageEditThunk = (imageid, boardid, imageURL, title, width, height, numberofimages, setNumberofImages) => async (dispatch) => {
+    console.log('editimagethunk');
+    const response = await fetch(`/api/board/images/imageedit/${imageid}`, {
+        method: ['PUT'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({
+            'imageid': imageid,
+            'board_id': boardid,
+            'width': width,
+            'height': height,
+            'imageURL': imageURL,
+            'title': title,
+                                   })
+    })
+
+    if(response.ok) {
+        console.log('line 187');
+        const imagedata = await response.json();
+        dispatch(imageEdit(imagedata));
+        // setNumberofImages(numberofimages+1)
+}}
+
 export const noteCreate = (boardid, numberofnotes,  setNumberofNotes) => async (dispatch) => {
     console.log("createnotethunk");
     const response = await fetch(`/api/board//notes/notecreate/${boardid}`, {
@@ -219,6 +258,26 @@ export const noteDelete = (noteid, boardid, numberofnotes,  setNumberofNotes) =>
 
 }}
 
+export const allnoteDelete = (boardid, numberofnotes,  setNumberofNotes) => async (dispatch) => {
+    console.log("deleteallnotethunk");
+    const response = await fetch(`/api/board/notes/allnotedelete/${boardid}`, {
+        method: ['DELETE'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({
+            'board_id': boardid,
+                                   })
+    })
+
+    if(response.ok) {
+        const noteData = await response.json();
+        dispatch(deleteAllNote(noteData));
+        setNumberofNotes(numberofnotes-10)
+
+}}
+
 export const imageDelete = (imageid, boardid, numberofimages, setNumberofImages) => async (dispatch) => {
     console.log("deleteimagethunk");
     const response = await fetch(`/api/board/images/imagedelete/${imageid}`, {
@@ -263,6 +322,8 @@ export default function boardReducer(state = initialState, action) {
             return imagestate1
         case NOTE_DELETE:
             return {...state, notes: action.payload}
+        case ALL_NOTES_DELETE:
+            return {...state, notes: action.payload}
         case IMAGE_DELETE:
             return {...state, images: action.payload}
         case NOTE_EDIT:
@@ -271,6 +332,8 @@ export default function boardReducer(state = initialState, action) {
             let imagesstate = {...state, images: action.payload}
             return imagesstate
         case IMAGES_POSITION:
+            return {...state, images: action.payload}
+        case IMAGES_EDIT:
             return {...state, images: action.payload}
         default:
             return state;

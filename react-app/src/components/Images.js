@@ -63,9 +63,10 @@ class Image extends React.Component {
     //         this.props.board_id)
     // }
 
-    // editNoteThunk = (noteid, boardid, color, title, content) => {
-    //     return this.props.editNoteThunk(noteid, boardid, color, title, content)
-    // }
+    editImageThunk = (imageid, boardid, imageURL, title, width, height) => {
+        return this.props.imageeditfunction(imageid, boardid, imageURL, title, width, height)
+    }
+
     render() {
       return (
         <Draggable
@@ -100,6 +101,7 @@ class Image extends React.Component {
                     imageURL = {this.props.imageURL}
                     width = {this.props.width}
                     height = {this.props.height}
+                    editImageThunk = {this.editImageThunk}
 
                     />
                 }

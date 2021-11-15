@@ -27,13 +27,23 @@ const ImageEditModal = (props) => {
     const [imageHeight, setimageHeight] = useState(props.height)
 
     const save = () => {
-        console.log(imageTitle, props.board_id);
-        // props.editNoteThunk(props.noteid,
-        //                     props.board_id,
-        //                     noteColor,
-        //                     noteTitle,
-        //                     noteContent)
-        // console.log('called editnote');
+        console.log('====', imageTitle, props.board_id);
+        props.editImageThunk(
+            props.imageid,
+            props.board_id,
+            imageURL,
+            imageTitle,
+            imageWidth,
+            imageHeight,
+
+
+
+
+
+
+
+        )
+
         props.onConfirm()
 
     }
@@ -71,7 +81,7 @@ const ImageEditModal = (props) => {
         </div>
         <div className={classes.actions}>
             <button
-            // onClick={save}
+            onClick={save}
             >Save</button>
             <button onClick={props.onConfirm}>Cancel</button>
         </div>
@@ -93,6 +103,8 @@ const ImageEditModalFull = (props) => {
                                     width = {props.width}
                                     height = {props.height}
                                     board_id = {props.board_id}
+                                    editImageThunk = {props.editImageThunk}
+
 
                                     />,
                                     document.getElementById('modal_location'))}

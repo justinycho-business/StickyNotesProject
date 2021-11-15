@@ -190,6 +190,20 @@ def notedelete(noteid):
     print("=====================note created", notesarray)
     return {'notes': notesarray}
 
+@board_routes.route('/notes/allnotedelete/<int:boardid>', methods=['DELETE'])
+@login_required
+def allnotedelete(boardid):
+    request_data_body = request.get_json()
+    board_id = request_data_body['board_id']
+    notes_to_dlt = Note.query.filter_by(board_id = boardid).all()
+    # step 2
+    for note in notes_to_dlt:
+        db.session.delete(note)
+    #step 3
+    db.session.commit()
+
+    return {'notes': []}
+
 @board_routes.route('/notes/noteedit/<int:note_id>', methods=['PUT'])
 @login_required
 def noteedit(note_id):
@@ -221,32 +235,35 @@ def noteedit(note_id):
 
 @board_routes.route('/images/imageedit/<int:imageid>', methods=['PUT'])
 @login_required
-def imageedit(note_id):
+def imageedit(imageid):
     request_data_body = request.get_json()
-    noteid_fromjson = request_data_body['noteid']
-    color_fromjson = request_data_body['color']
+    imageid_fromjson = request_data_body['imageid']
+    width_fromjson = request_data_body['width']
     title_fromjson = request_data_body['title']
-    content_fromjson = request_data_body['content']
+    imageURL_fromjson = request_data_body['imageURL']
     boardid_fromjson = request_data_body['board_id']
+    height_fromjson = request_data_body['height']
 
-    note_to_change = Note.query.get(noteid_fromjson)
-    print("==============", note_to_change)
-    note_to_change.content = content_fromjson
-    note_to_change.title = title_fromjson
-    note_to_change.color = color_fromjson
+    image_to_change = Image.query.get(imageid_fromjson)
+
+    image_to_change.width = width_fromjson
+    image_to_change.title = title_fromjson
+    image_to_change.height = height_fromjson
+    image_to_change.imageURL = imageURL_fromjson
 
     db.session.commit()
 
-    notes = Note.query.filter_by(board_id=boardid_fromjson).all()
-    notesarray = [note.to_dict() for note in notes]
+    images = Image.query.filter_by(board_id=boardid_fromjson).all()
 
-    def myFunc(note):
-        return note['id']
-    # so sticky notes persist on reload
-    notesarray.sort(key=myFunc)
+    imagesarray = [image.to_dict() for image in images]
 
-    print("=====================note edited", notesarray)
-    return {'notes': notesarray}
+    def myFunc(image):
+        return image['id']
+    # so images persist location on reload
+
+    imagesarray.sort(key=myFunc)
+    print('line 251 ========', imagesarray)
+    return {'images': imagesarray}
 
 @board_routes.route('/notes/notepositionchange/<int:note_id>', methods=['PUT'])
 @login_required

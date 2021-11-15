@@ -9,8 +9,10 @@ import {getAllBoard,
         noteCreate,
         imageCreate,
         noteDelete,
+        allnoteDelete,
         imageDelete,
         noteEditThunk,
+        imageEditThunk ,
         getAllImagesThunk } from '../store/boards';
 import Draggable, {DraggableCore} from 'react-draggable'; // https://www.npmjs.com/package/react-draggable
 import Note from './Notes';
@@ -34,6 +36,7 @@ function BoardPage() {
   useEffect(
     () => {
         let numbernotes;
+        const req0 = dispatch(getAllBoard(1));
         const req = dispatch(getAllNotesThunk(boardid));
         req.then(data => {
             console.log(data);
@@ -84,6 +87,10 @@ function BoardPage() {
 
   return dispatch(noteDelete(noteid, boardid, numberofnotes, setNumberofNotes))
 }
+const allnoteDeletefunction = (boardid) => {
+    return dispatch(allnoteDelete(boardid, numberofnotes, setNumberofNotes))
+
+}
 const deleteImage = (imageid, boardid) => {
     console.log("will dispatch imagedeletethunk");
 
@@ -105,6 +112,19 @@ const editNoteThunk = (noteid, boardid, color, title, content) => {
   return editfunction(noteid, boardid, color, title, content)
 }
 
+const imageeditfunction = (imageid, boardid, imageURL, title, width, height) => {
+    return dispatch(imageEditThunk(imageid,
+                                    boardid,
+                                    imageURL,
+                                    title,
+                                    width,
+                                    height,
+                                    numberofimages,
+                                    setNumberofImages
+
+                                    ))
+}
+
 
   if (imagesRedux && imagesRedux.length > 0 ) {
     imagesJSX = imagesRedux.map((image) => {
@@ -121,6 +141,7 @@ const editNoteThunk = (noteid, boardid, color, title, content) => {
             height = {image.height}
             position_dispatch = { positionImageDispatch}
             delete_image_thunk = {deleteImage}
+            imageeditfunction = {imageeditfunction}
 
           />
         </div>
@@ -155,7 +176,7 @@ const editNoteThunk = (noteid, boardid, color, title, content) => {
   return (
     <>
     <div className={classes.header}>
-      <h1>Board Name</h1>
+      <h1>{boardsRedux && boardsRedux.length > 0 && boardsRedux[boardid-1]['name']}</h1>
       </div>
       <div className={classes.whiteboardcontainer}>
         <div className={classes.notecanvas}>
@@ -170,7 +191,7 @@ const editNoteThunk = (noteid, boardid, color, title, content) => {
             <button onClick={createNote}>Add Sticky Note</button>
             <button onClick= {createImage}>Add Image</button>
             <button>Draw On Board</button>
-            <button>Clear Sticky Notes</button>
+            <button onClick= {() => {allnoteDeletefunction(boardid)}}>Clear Sticky Notes</button>
             <button>Clear Images</button>
             <button>Clear Board</button>
 
