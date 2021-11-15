@@ -79,8 +79,8 @@ def imagecreate(boardid):
         title = 'New Image',
         board_id = boardid,
         imageURL = "https://images.freeimages.com/images/large-previews/647/snowy-mountain-1378865.jpg",
-        x=0,
-        y=0,
+        x=300,
+        y=300,
         height = 250,
         width = 250
     )

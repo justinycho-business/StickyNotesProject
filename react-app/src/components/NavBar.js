@@ -9,12 +9,12 @@ const NavBar = () => {
     <nav className={classes.navbar}>
 
         <div>
-          <NavLink to='/' exact={true} activeClassName='active'>
+          <NavLink to='/' exact={true} activeClassName='active' className={classes.links}>
             Boards
           </NavLink>
         </div>
         <div>
-          <NavLink to='/login' exact={true} activeClassName='active'>
+          <NavLink to='/login' exact={true} activeClassName='active' className={classes.links}>
             Login
           </NavLink>
         </div>

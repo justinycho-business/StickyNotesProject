@@ -65,6 +65,7 @@ class Note extends React.Component {
     }
     render() {
       return (
+        <div className='outerdiv'>
         <Draggable
           handle=".handle"
           defaultPosition={{x: this.state.deltaPosition.x, y: this.state.deltaPosition.y}}
@@ -108,6 +109,7 @@ class Note extends React.Component {
             <div>{this.props.content}</div>
           </div>
         </Draggable>
+        </div>
       );
     }
   }

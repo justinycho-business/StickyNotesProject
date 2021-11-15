@@ -11,7 +11,13 @@
     justify-content: space-between;
     width: 8.65vw;
 }
+.outerdivimage{
+    display: flex;
+    z-index: 100;
+    position: static;
 
+
+}
 .containerheader{
     display: flex;
     flex-direction: row;

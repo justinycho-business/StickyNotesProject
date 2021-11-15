@@ -9,7 +9,16 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 8.65vw;
+    width: 8.3vw;
+}
+
+.outerdiv{
+    display: flex;
+    z-index: 100;
+    position: absolute;
+
+
+
 }
 
 .containerheader{

@@ -15,8 +15,11 @@
 
     width: 95vw;
     height: 75vh;
-    border: 2px solid black;
+    border: 2px solid white;
     border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
 }
 
 .whiteboardcontainer {
@@ -30,7 +33,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid black;
+    border: 2px solid white;
     border-radius: 10px;
     width: 90vw;
+    margin-top: 1vh;
+    background-color: beige;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.actionpanel > button {
+    padding: 1vw;
+    margin: 1vw;
+    border: 1px solid white;
+    padding: 1vh;
+    border-radius: 1vh;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+    background-color: white;
+
 }

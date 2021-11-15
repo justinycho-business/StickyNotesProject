@@ -18,9 +18,8 @@ import {getAllBoard,
 import Draggable, {DraggableCore} from 'react-draggable'; // https://www.npmjs.com/package/react-draggable
 import Note from './Notes';
 import Image from './Images';
-import Canvas from './reactdrawable';
-import {Canvas1} from './Canvas'
-import { ClearCanvasButton } from './ClearCanvasButton';
+
+import ReactKonva from './ReactKonva';
 
 function BoardPage() {
   const dispatch = useDispatch();
@@ -30,6 +29,7 @@ function BoardPage() {
   const boardsRedux = useSelector(state => state?.boards?.boards?.boards);
   const notesRedux = useSelector(state => state?.boards?.notes?.notes);
   const imagesRedux = useSelector(state => state?.boards?.images?.images);
+  const [canvasOnOrOff, setcanvasOnOrOff] = useState(false)
 
 
   // const showboard = boards === undefined ? boards.length > 0 : false
@@ -64,7 +64,11 @@ function BoardPage() {
 
   let notesJSX;
   let imagesJSX;
+  const canvasbutton = () => {
+      const current = canvasOnOrOff
+      setcanvasOnOrOff(!current)
 
+  }
   const positiondispatch = (noteid, x, y) => {
     return dispatch(positionNotesThunk(noteid, x, y))
   }
@@ -191,7 +195,7 @@ const imageeditfunction = (imageid, boardid, imageURL, title, width, height) => 
       <div className={classes.whiteboardcontainer}>
 
         <div className={classes.notecanvas}>
-             {/* {<Canvas1 notesJSX = {notesJSX} imagesJSX = {imagesJSX}/>} */}
+             {canvasOnOrOff &&<ReactKonva/>}
 
 
             {notesRedux && notesRedux.length > 0 &&
@@ -204,7 +208,7 @@ const imageeditfunction = (imageid, boardid, imageURL, title, width, height) => 
             <h3>Action Panel: </h3>
             <button onClick={createNote}>Add Sticky Note</button>
             <button onClick= {createImage}>Add Image</button>
-            {/* <button>Draw On Board</button> */}
+            <button onClick={canvasbutton}>Board On/Off</button>
             <button onClick= {() => {allnoteDeletefunction(boardid)}}>Clear Sticky Notes</button>
             <button onClick={() => {allimageDeletefunction(boardid)}}>Clear Images</button>
             {/* <button>Clear Board</button> */}

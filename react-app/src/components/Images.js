@@ -69,6 +69,7 @@ class Image extends React.Component {
 
     render() {
       return (
+        <div className='outerdivimage' style={{ position: 'status', zIndex: '100' }}>
         <Draggable
           handle=".handle"
           defaultPosition={{x: this.state.deltaPosition.x, y: this.state.deltaPosition.y}}
@@ -112,6 +113,7 @@ class Image extends React.Component {
             <img src={this.props.imageURL} style={{'height': this.props.height, "width": this.props.width}}/>
           </div>
         </Draggable>
+        </div>
       );
     }
   }
