@@ -5,11 +5,16 @@ import classes from './BoardPage.module.css';
 import {getAllBoard,
         getAllNotesThunk,
         positionNotesThunk,
+        positionImagesThunk,
         noteCreate,
+        imageCreate,
         noteDelete,
-        noteEditThunk} from '../store/boards';
+        imageDelete,
+        noteEditThunk,
+        getAllImagesThunk } from '../store/boards';
 import Draggable, {DraggableCore} from 'react-draggable'; // https://www.npmjs.com/package/react-draggable
 import Note from './Notes';
+import Image from './Images';
 
 function BoardPage() {
   const dispatch = useDispatch();
@@ -18,10 +23,12 @@ function BoardPage() {
   const user = useSelector(state => state?.session?.user);
   const boardsRedux = useSelector(state => state?.boards?.boards?.boards);
   const notesRedux = useSelector(state => state?.boards?.notes?.notes);
+  const imagesRedux = useSelector(state => state?.boards?.images?.images);
 
 
   // const showboard = boards === undefined ? boards.length > 0 : false
     const [numberofnotes, setNumberofNotes]= useState(0)
+    const [numberofimages, setNumberofImages]= useState(0)
 
 
   useEffect(
@@ -36,9 +43,28 @@ function BoardPage() {
 
   }, [numberofnotes]);
 
+  useEffect(
+    () => {
+        let numberimages;
+        const req = dispatch(getAllImagesThunk(boardid));
+        req.then(data => {
+            console.log(data);
+            numberimages = data
+        })
+
+
+  }, [numberofimages]);
+
   let notesJSX;
+  let imagesJSX;
+
   const positiondispatch = (noteid, x, y) => {
     return dispatch(positionNotesThunk(noteid, x, y))
+  }
+
+  const positionImageDispatch = (imageid, boardid, x, y) => {
+      console.log("image reposition");
+    return dispatch(positionImagesThunk(imageid, boardid, x, y))
   }
 
   const createNote = () => {
@@ -47,10 +73,21 @@ function BoardPage() {
     return dispatch(noteCreate(boardid, numberofnotes, setNumberofNotes))
   }
 
+  const createImage = () => {
+    console.log("will dispatch imagecreatethunk");
+
+  return dispatch(imageCreate(boardid, numberofimages, setNumberofImages))
+}
+
   const deleteNote = (noteid, boardid) => {
-    console.log("will dispatch notecreatethunk");
+    console.log("will dispatch notedeletethunk");
 
   return dispatch(noteDelete(noteid, boardid, numberofnotes, setNumberofNotes))
+}
+const deleteImage = (imageid, boardid) => {
+    console.log("will dispatch imagedeletethunk");
+
+  return dispatch(imageDelete(imageid, boardid, numberofimages, setNumberofImages))
 }
 const editfunction = (noteid, boardid, color, title, content) => {
     return dispatch(noteEditThunk(
@@ -68,6 +105,28 @@ const editNoteThunk = (noteid, boardid, color, title, content) => {
   return editfunction(noteid, boardid, color, title, content)
 }
 
+
+  if (imagesRedux && imagesRedux.length > 0 ) {
+    imagesJSX = imagesRedux.map((image) => {
+      return (
+        <div key={`image-${image.id}`}>
+          <Image
+            board_id = {image.board_id}
+            imageURL = {image.imageURL}
+            id = {image.id}
+            title = {image.title}
+            x = {image.x}
+            y = {image.y}
+            width = {image.width}
+            height = {image.height}
+            position_dispatch = { positionImageDispatch}
+            delete_image_thunk = {deleteImage}
+
+          />
+        </div>
+      );
+    });
+  }
 
   if (notesRedux && notesRedux.length > 0 ) {
     notesJSX = notesRedux.map((note) => {
@@ -102,11 +161,14 @@ const editNoteThunk = (noteid, boardid, color, title, content) => {
         <div className={classes.notecanvas}>
             {notesRedux && notesRedux.length > 0 &&
                 <>{notesJSX}</>}
+            {imagesRedux && imagesRedux.length > 0  &&
+                <>{imagesJSX}</>}
+
         </div>
         <div className={classes.actionpanel}>
             <h3>Action Panel: </h3>
             <button onClick={createNote}>Add Sticky Note</button>
-            <button>Add Image</button>
+            <button onClick= {createImage}>Add Image</button>
             <button>Draw On Board</button>
             <button>Clear Sticky Notes</button>
             <button>Clear Images</button>

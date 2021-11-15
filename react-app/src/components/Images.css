@@ -1,0 +1,21 @@
+.noteimage{
+    width: 12vw;
+    height: 12vh;
+    background-color: white;
+}
+
+.handle{
+    background-color: beige;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 8.65vw;
+}
+
+.containerheader{
+    display: flex;
+    flex-direction: row;
+    background-color: beige;
+    align-items: center;
+    justify-content: space-between;
+}

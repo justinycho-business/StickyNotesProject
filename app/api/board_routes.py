@@ -1,5 +1,5 @@
 from flask import Blueprint, json, jsonify, request
-from app.models import User, db, Board, Note
+from app.models import User, db, Board, Note, Image
 from flask_login import login_required
 from sqlalchemy.sql import func
 # import requests
@@ -27,6 +27,103 @@ def getuserboards():
         "boards": boardarray
     }
 
+@board_routes.route('/images/<int:boardid>')
+@login_required
+def getimages(boardid):
+    images = Image.query.filter_by(board_id=boardid).all()
+
+    imagesarray = [image.to_dict() for image in images]
+
+    def myFunc(image):
+        return image['id']
+    # so images persist location on reload
+
+    imagesarray.sort(key=myFunc)
+    print(imagesarray)
+    return {'images': imagesarray}
+
+@board_routes.route('/images/imagepositionchange/<int:image_id>', methods=['PUT'])
+@login_required
+def imagepositionchange(image_id):
+    request_data_body = request.get_json()
+    imageid_fromjson = request_data_body['imageid']
+    x_fromjson = request_data_body['x']
+    y_fromjson = request_data_body['y']
+    boardid = request_data_body['boardid']
+    image_to_change = Image.query.get(imageid_fromjson)
+
+    image_to_change.x = x_fromjson
+    image_to_change.y = y_fromjson
+
+    db.session.commit()
+
+    images = Image.query.filter_by(board_id=boardid).all()
+
+    imagesarray = [image.to_dict() for image in images]
+
+    def myFunc(image):
+        return image['id']
+    # so images persist location on reload
+
+    imagesarray.sort(key=myFunc)
+
+    return {'images': imagesarray}
+
+
+
+@board_routes.route('/images/imagecreate/<int:boardid>', methods=['POST'])
+@login_required
+def imagecreate(boardid):
+    # step 1
+    image_to_create = Image(
+        title = 'New Image',
+        board_id = boardid,
+        imageURL = "https://images.freeimages.com/images/large-previews/647/snowy-mountain-1378865.jpg",
+        x=0,
+        y=0,
+        height = 250,
+        width = 250
+    )
+
+    # step 2
+    db.session.add(image_to_create)
+    #step 3
+    db.session.commit()
+    print("image created")
+    images = Image.query.filter_by(board_id=boardid).all()
+
+    imagesarray = [image.to_dict() for image in images]
+
+    def myFunc(image):
+        return image['id']
+    # so images persist location on reload
+
+    imagesarray.sort(key=myFunc)
+    print(imagesarray)
+    return {'images': imagesarray}
+
+@board_routes.route('/images/imagedelete/<int:imageid>', methods=['DELETE'])
+@login_required
+def imagedelete(imageid):
+    request_data_body = request.get_json()
+    board_id = request_data_body['board_id']
+    image_to_dlt = Image.query.filter_by(id = imageid).first()
+    # step 2
+    db.session.delete(image_to_dlt)
+    #step 3
+    db.session.commit()
+    images = Image.query.filter_by(board_id=board_id).all()
+
+    imagesarray = [image.to_dict() for image in images]
+
+    def myFunc(image):
+        return image['id']
+    # so images persist location on reload
+
+    imagesarray.sort(key=myFunc)
+    print(imagesarray)
+    return {'images': imagesarray}
+
 @board_routes.route('/notes/<int:boardid>')
 @login_required
 def getnotes(boardid):
@@ -41,6 +138,7 @@ def getnotes(boardid):
     notesarray.sort(key=myFunc)
     print(notesarray)
     return {'notes': notesarray}
+
 
 @board_routes.route('/notes/notecreate/<int:boardid>', methods=['POST'])
 @login_required
@@ -95,6 +193,35 @@ def notedelete(noteid):
 @board_routes.route('/notes/noteedit/<int:note_id>', methods=['PUT'])
 @login_required
 def noteedit(note_id):
+    request_data_body = request.get_json()
+    noteid_fromjson = request_data_body['noteid']
+    color_fromjson = request_data_body['color']
+    title_fromjson = request_data_body['title']
+    content_fromjson = request_data_body['content']
+    boardid_fromjson = request_data_body['board_id']
+
+    note_to_change = Note.query.get(noteid_fromjson)
+    print("==============", note_to_change)
+    note_to_change.content = content_fromjson
+    note_to_change.title = title_fromjson
+    note_to_change.color = color_fromjson
+
+    db.session.commit()
+
+    notes = Note.query.filter_by(board_id=boardid_fromjson).all()
+    notesarray = [note.to_dict() for note in notes]
+
+    def myFunc(note):
+        return note['id']
+    # so sticky notes persist on reload
+    notesarray.sort(key=myFunc)
+
+    print("=====================note edited", notesarray)
+    return {'notes': notesarray}
+
+@board_routes.route('/images/imageedit/<int:imageid>', methods=['PUT'])
+@login_required
+def imageedit(note_id):
     request_data_body = request.get_json()
     noteid_fromjson = request_data_body['noteid']
     color_fromjson = request_data_body['color']

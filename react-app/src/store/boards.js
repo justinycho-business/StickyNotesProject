@@ -2,9 +2,17 @@
 // Define action types
 const GET_ALL_BOARDS = 'board/GET_ALL_BOARDS'
 const GET_ALL_NOTES = 'board/GET_ALL_NOTES'
-const NOTES_POSITION = 'board/NOTES_POSITION'
+const GET_ALL_IMAGES = 'board/GET_ALL_IMAGES'
+
+const NOTES_POSITION = 'board/NOTES_POSITION';
+const IMAGES_POSITION = 'board/IMAGES_POSITION';
+
 const NOTE_CREATE = 'board/NOTES_POSITION';
+const IMAGE_CREATE = 'board/IMAGES_POSITION';
+
 const NOTE_DELETE = 'board/NOTES_DELETE';
+const IMAGE_DELETE = 'board/IMAGE_DELETE';
+
 const NOTE_EDIT = 'board/NOTES_EDIT'
 
 // Action Creators
@@ -18,9 +26,19 @@ const getAllNotes = (notes) => ({
     payload: notes
 })
 
+const getAllImages = (images) => ({
+    type: GET_ALL_IMAGES,
+    payload: images
+})
+
 const noteEdit = (notes) => ({
     type: NOTE_EDIT,
     payload: notes
+})
+
+const imagePosition = (images) => ({
+    type: IMAGES_POSITION,
+    payload: images
 })
 
 const notePosition = (notes) => ({
@@ -33,9 +51,19 @@ const newNote = (notes) => ({
     payload: notes
 })
 
+const newImage = (images) => ({
+    type: IMAGE_CREATE,
+    payload: images
+})
+
 const deleteNote = (notes) => ({
     type: NOTE_DELETE,
     payload: notes
+})
+
+const deleteImage = (images) => ({
+    type: IMAGE_DELETE,
+    payload: images
 })
 
 // Define Thunks
@@ -58,6 +86,16 @@ export const getAllNotesThunk = (boardid) => async (dispatch) => {
         return noteData['notes'].length
 }}
 
+export const getAllImagesThunk = (boardid) => async (dispatch) => {
+
+    const response = await fetch(`/api/board/images/${boardid}`)
+
+    if(response.ok) {
+        const imageData = await response.json();
+        dispatch(getAllImages(imageData));
+        return imageData['images'].length
+}}
+
 export const positionNotesThunk = (noteid, x, y) => async (dispatch) => {
     console.log('positionthunk');
     const response = await fetch(`/api/board/notes/notepositionchange/${noteid}`, {
@@ -76,6 +114,27 @@ export const positionNotesThunk = (noteid, x, y) => async (dispatch) => {
     if(response.ok) {
         const noteData = await response.json();
         dispatch(notePosition(noteData));
+}}
+
+export const positionImagesThunk = (imageid, boardid, x, y) => async (dispatch) => {
+    console.log('imagepositionthunk');
+    const response = await fetch(`/api/board/images/imagepositionchange/${imageid}`, {
+        method: ['PUT'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({
+            'imageid': imageid,
+            'x': x,
+            'y': y,
+            'boardid': boardid
+                                   })
+    })
+
+    if(response.ok) {
+        const imageData = await response.json();
+        dispatch(imagePosition(imageData));
 }}
 
 export const noteEditThunk = (noteid, boardid, color, title, content, numberofnotes,  setNumberofNotes) => async (dispatch) => {
@@ -120,6 +179,26 @@ export const noteCreate = (boardid, numberofnotes,  setNumberofNotes) => async (
 
 }}
 
+export const imageCreate = (boardid, numberofimages, setNumberofImages) => async (dispatch) => {
+    console.log("createimagethunk");
+    const response = await fetch(`/api/board/images/imagecreate/${boardid}`, {
+        method: ['POST'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({
+            'board_id': boardid,
+                                   })
+    })
+
+    if(response.ok) {
+        const imageData = await response.json();
+        dispatch(newImage(imageData));
+        setNumberofImages(numberofimages+1)
+
+}}
+
 export const noteDelete = (noteid, boardid, numberofnotes,  setNumberofNotes) => async (dispatch) => {
     console.log("deletenotethunk");
     const response = await fetch(`/api/board//notes/notedelete/${noteid}`, {
@@ -137,6 +216,26 @@ export const noteDelete = (noteid, boardid, numberofnotes,  setNumberofNotes) =>
         const noteData = await response.json();
         dispatch(deleteNote(noteData));
         setNumberofNotes(numberofnotes-1)
+
+}}
+
+export const imageDelete = (imageid, boardid, numberofimages, setNumberofImages) => async (dispatch) => {
+    console.log("deleteimagethunk");
+    const response = await fetch(`/api/board/images/imagedelete/${imageid}`, {
+        method: ['DELETE'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({
+            'board_id': boardid,
+                                   })
+    })
+
+    if(response.ok) {
+        const imageData = await response.json();
+        dispatch(deleteImage(imageData));
+        setNumberofImages(numberofimages-1)
 
 }}
 
@@ -159,10 +258,20 @@ export default function boardReducer(state = initialState, action) {
             let notestate1 = {...state, notes: action.payload}
             // notestate = [action.payload['notes']['board_id']] = action.payload
             return notestate1
+        case IMAGE_CREATE:
+            let imagestate1 = {...state, images: action.payload}
+            return imagestate1
         case NOTE_DELETE:
             return {...state, notes: action.payload}
+        case IMAGE_DELETE:
+            return {...state, images: action.payload}
         case NOTE_EDIT:
             return {...state, notes: action.payload}
+        case GET_ALL_IMAGES:
+            let imagesstate = {...state, images: action.payload}
+            return imagesstate
+        case IMAGES_POSITION:
+            return {...state, images: action.payload}
         default:
             return state;
     };
