@@ -206,7 +206,7 @@ export const imageEditThunk = (imageid, boardid, imageURL, title, width, height,
 
 export const noteCreate = (boardid, numberofnotes,  setNumberofNotes) => async (dispatch) => {
     console.log("createnotethunk");
-    const response = await fetch(`/api/board//notes/notecreate/${boardid}`, {
+    const response = await fetch(`/api/board/notes/notecreate/${boardid}`, {
         method: ['POST'],
         headers: {
             'Accept' : 'application/json',
@@ -246,7 +246,7 @@ export const imageCreate = (boardid, numberofimages, setNumberofImages) => async
 
 export const noteDelete = (noteid, boardid, numberofnotes,  setNumberofNotes) => async (dispatch) => {
     console.log("deletenotethunk");
-    const response = await fetch(`/api/board//notes/notedelete/${noteid}`, {
+    const response = await fetch(`/api/board/notes/notedelete/${noteid}`, {
         method: ['DELETE'],
         headers: {
             'Accept' : 'application/json',
