@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Component } from 'react';
 import { NavLink, useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classes from './BoardPage.module.css';
@@ -18,6 +18,9 @@ import {getAllBoard,
 import Draggable, {DraggableCore} from 'react-draggable'; // https://www.npmjs.com/package/react-draggable
 import Note from './Notes';
 import Image from './Images';
+import Canvas from './reactdrawable';
+import {Canvas1} from './Canvas'
+import { ClearCanvasButton } from './ClearCanvasButton';
 
 function BoardPage() {
   const dispatch = useDispatch();
@@ -131,6 +134,8 @@ const imageeditfunction = (imageid, boardid, imageURL, title, width, height) => 
 }
 
 
+
+
   if (imagesRedux && imagesRedux.length > 0 ) {
     imagesJSX = imagesRedux.map((image) => {
       return (
@@ -184,7 +189,11 @@ const imageeditfunction = (imageid, boardid, imageURL, title, width, height) => 
       <h1>{boardsRedux && boardsRedux.length > 0 && boardsRedux[boardid-1]['name']}</h1>
       </div>
       <div className={classes.whiteboardcontainer}>
+
         <div className={classes.notecanvas}>
+             {/* {<Canvas1 notesJSX = {notesJSX} imagesJSX = {imagesJSX}/>} */}
+
+
             {notesRedux && notesRedux.length > 0 &&
                 <>{notesJSX}</>}
             {imagesRedux && imagesRedux.length > 0  &&
@@ -195,10 +204,10 @@ const imageeditfunction = (imageid, boardid, imageURL, title, width, height) => 
             <h3>Action Panel: </h3>
             <button onClick={createNote}>Add Sticky Note</button>
             <button onClick= {createImage}>Add Image</button>
-            <button>Draw On Board</button>
+            {/* <button>Draw On Board</button> */}
             <button onClick= {() => {allnoteDeletefunction(boardid)}}>Clear Sticky Notes</button>
             <button onClick={() => {allimageDeletefunction(boardid)}}>Clear Images</button>
-            <button>Clear Board</button>
+            {/* <button>Clear Board</button> */}
 
 
         </div>

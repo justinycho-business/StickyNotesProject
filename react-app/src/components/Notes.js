@@ -73,7 +73,9 @@ class Note extends React.Component {
           scale={1}
           onStart={this.handleStart}
           onDrag={this.handleDrag}
-          onStop={this.handleStop}>
+          onStop={this.handleStop}
+          style={{ position: 'absolute', zIndex: '100' }}
+          >
           <div className="note" style={{backgroundColor: this.props.color}}>
             <div className="containerheader">
                 <div className="handle">
