@@ -17,6 +17,7 @@ const NOTE_EDIT = 'board/NOTES_EDIT';
 const IMAGES_EDIT = 'board/IMAGES_EDIT';
 
 const ALL_NOTES_DELETE = 'board/ALL_NOTES_DELETE';
+const ALL_IMAGES_DELETE = 'board/ALL_IMAGES_DELETE';
 
 
 // Action Creators
@@ -73,6 +74,11 @@ const deleteNote = (notes) => ({
 const deleteAllNote = (notes) => ({
     type: ALL_NOTES_DELETE,
     payload: notes
+})
+
+const deleteAllImage = (images) => ({
+    type: ALL_IMAGES_DELETE,
+    payload: images
 })
 
 const deleteImage = (images) => ({
@@ -278,6 +284,26 @@ export const allnoteDelete = (boardid, numberofnotes,  setNumberofNotes) => asyn
 
 }}
 
+export const allimageDelete = (boardid, numberofimages, setNumberofImages) => async (dispatch) => {
+    console.log("deleteallimagethunk");
+    const response = await fetch(`/api/board/images/allimagesdelete/${boardid}`, {
+        method: ['DELETE'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({
+            'board_id': boardid,
+                                   })
+    })
+
+    if(response.ok) {
+        const imageData = await response.json();
+        dispatch(deleteAllImage(imageData));
+        setNumberofImages(numberofimages-10)
+
+}}
+
 export const imageDelete = (imageid, boardid, numberofimages, setNumberofImages) => async (dispatch) => {
     console.log("deleteimagethunk");
     const response = await fetch(`/api/board/images/imagedelete/${imageid}`, {
@@ -325,6 +351,8 @@ export default function boardReducer(state = initialState, action) {
         case ALL_NOTES_DELETE:
             return {...state, notes: action.payload}
         case IMAGE_DELETE:
+            return {...state, images: action.payload}
+        case ALL_IMAGES_DELETE:
             return {...state, images: action.payload}
         case NOTE_EDIT:
             return {...state, notes: action.payload}

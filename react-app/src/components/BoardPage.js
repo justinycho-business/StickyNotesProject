@@ -10,6 +10,7 @@ import {getAllBoard,
         imageCreate,
         noteDelete,
         allnoteDelete,
+        allimageDelete,
         imageDelete,
         noteEditThunk,
         imageEditThunk ,
@@ -95,6 +96,10 @@ const deleteImage = (imageid, boardid) => {
     console.log("will dispatch imagedeletethunk");
 
   return dispatch(imageDelete(imageid, boardid, numberofimages, setNumberofImages))
+}
+
+const allimageDeletefunction = (boardid) => {
+    return dispatch(allimageDelete(boardid, numberofimages, setNumberofImages))
 }
 const editfunction = (noteid, boardid, color, title, content) => {
     return dispatch(noteEditThunk(
@@ -192,7 +197,7 @@ const imageeditfunction = (imageid, boardid, imageURL, title, width, height) => 
             <button onClick= {createImage}>Add Image</button>
             <button>Draw On Board</button>
             <button onClick= {() => {allnoteDeletefunction(boardid)}}>Clear Sticky Notes</button>
-            <button>Clear Images</button>
+            <button onClick={() => {allimageDeletefunction(boardid)}}>Clear Images</button>
             <button>Clear Board</button>
 
 

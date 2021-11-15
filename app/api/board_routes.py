@@ -123,6 +123,19 @@ def imagedelete(imageid):
     imagesarray.sort(key=myFunc)
     print(imagesarray)
     return {'images': imagesarray}
+@board_routes.route('/images/allimagesdelete/<int:boardid>', methods=['DELETE'])
+@login_required
+def allimagesdelete(boardid):
+    request_data_body = request.get_json()
+    board_id = request_data_body['board_id']
+    images_to_dlt = Image.query.filter_by(board_id = board_id).all()
+    # step 2
+    for image in images_to_dlt:
+        db.session.delete(image)
+    #step 3
+    db.session.commit()
+
+    return {'images': []}
 
 @board_routes.route('/notes/<int:boardid>')
 @login_required
