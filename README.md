@@ -1,5 +1,6 @@
 # StickyNotesProject
-
+Live web app: https://justin-sticky-note-app.herokuapp.com/
+video demo: https://youtu.be/SsAg_CvY9bg
 Koala mini project requirements
 
 Summary
